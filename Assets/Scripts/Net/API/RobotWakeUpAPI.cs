@@ -9,6 +9,9 @@ public class RobotWakeUpAPI : PostWebRequest
     {
         SetUrl(APIDefine.BaseUrl + "/api/core/system/v1/power/:wakeup");
 
+        AddHeader("accept", "application/json");
+        AddHeader("Content-Type", "application/json");
+
         SendWebRequest();
     }
 }

@@ -9,6 +9,9 @@ public class RobotNavigationStatusAPI : GetWebRequest
     {
         SetUrl(APIDefine.BaseUrl + "/api/core/slam/v1/localization/pose");
 
+        AddHeader("accept", "application/json");
+        AddHeader("Content-Type", "application/json");
+
         SendWebRequest((jsonStr) => 
         {
             finishAction?.Invoke(jsonStr != null);

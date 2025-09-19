@@ -43,6 +43,9 @@ public class GetPOIsAPI : GetWebRequest
     {
         SetUrl(APIDefine.BaseUrl + "/api/multi-floor/map/v1/pois");
 
+        AddHeader("accept", "application/json");
+        AddHeader("Content-Type", "application/json");
+
         SendWebRequest((jsonStr) => 
         {
             finishAction?.Invoke(JsonConvert.DeserializeObject<Poi[]>((string)jsonStr));

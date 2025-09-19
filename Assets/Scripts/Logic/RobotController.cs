@@ -57,6 +57,63 @@ public class RobotController : LogicComponent
         });
     }
 
+
+    private void InitialRobot()
+    {
+        DirectCallUI<string>(UICommand.AddMessage, $"[Robot Request] 機器人狀態檢查");
+
+        new RobotCapabilitiesAPI((resp) => 
+        {
+            if (!resp.Enabled)
+            {
+                // 告知錯誤
+                DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人初始化尚未");
+                DirectCallUI<bool>(UICommand.RobotReady, false);
+                return;
+            }
+
+            new RobotPowerStatusAPI((resp) =>
+            {
+                if(resp.PowerStage != "running")
+                {
+                    // 告知錯誤
+                    DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人開機尚未完成 {resp.PowerStage}");
+                    DirectCallUI<bool>(UICommand.RobotReady, false);
+                    return;
+                }
+
+                if(resp.SleepMode != "awake")
+                {
+                    // 告知錯誤 並主動 wake up
+                    new RobotWakeUpAPI();
+                    DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人尚未喚醒，正在喚醒中 {resp.SleepMode}");
+                    DirectCallUI<bool>(UICommand.RobotReady, false);
+                    return;
+                }
+
+                if(resp.BatteryPercentage <= 15)
+                {
+                    // 告知錯誤 但是不中斷流程
+                    DirectCallUI<string>(UICommand.AddMessage, $"[Robot Warning] 機器人電量不足 {resp.BatteryPercentage}/100");
+                }
+
+                new RobotNavigationStatusAPI((b) => 
+                {
+                    if(!b)
+                    {
+                        DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人定位尚未完成");
+                        DirectCallUI<bool>(UICommand.RobotReady, false);
+                        return;
+                    }
+
+                    SendMsg<RobotReadyMsg>();
+
+                    DirectCallUI<bool>(UICommand.RobotReady, true);
+                });
+            });
+        });
+    }
+
     private void MoveCallback(MoveResponse moveResponse)
     {
         if (moveResponse?.State == null)
@@ -82,49 +139,5 @@ public class RobotController : LogicComponent
 
         // 其他情況 (執行中 or 成功) 視為沒有錯誤                
         DirectCallUI<string>(UICommand.AddMessage, $"[Log] 機器人開始動作");
-    }
-
-    private void InitialRobot()
-    {
-        DirectCallUI<string>(UICommand.AddMessage, $"[Robot Request] 機器人狀態檢查");
-
-        new RobotPowerStatusAPI((resp) =>
-        {
-            if(resp.PowerStage != "running")
-            {
-                // 告知錯誤
-                DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人開機尚未完成 {resp.PowerStage}");
-                DirectCallUI<bool>(UICommand.RobotReady, false);
-                return;
-            }
-
-            if(resp.SleepMode != "awake")
-            {
-                // 告知錯誤 並主動 wake up
-                new RobotWakeUpAPI();
-                DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人尚未喚醒，正在喚醒中 {resp.SleepMode}");
-                DirectCallUI<bool>(UICommand.RobotReady, false);
-                return;
-            }
-
-            if(resp.BatteryPercentage <= 15)
-            {
-                // 告知錯誤 但是不中斷流程
-                DirectCallUI<string>(UICommand.AddMessage, $"[Robot Warning] 機器人電量不足 {resp.BatteryPercentage}/100");
-            }
-
-            new RobotNavigationStatusAPI((b) => 
-            {
-                if(!b)
-                {
-                    DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人定位尚未完成");
-                    return;
-                }
-
-                SendMsg<RobotReadyMsg>();
-
-                DirectCallUI<bool>(UICommand.RobotReady, true);
-            });
-        });
     }
 }

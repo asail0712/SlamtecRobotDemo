@@ -14,6 +14,9 @@ public class RobotBackToChargAPI : PostWebRequest
 
         SetUrl(APIDefine.BaseUrl + "/api/core/motion/v1/actions");
 
+        AddHeader("accept", "application/json");
+        AddHeader("Content-Type", "application/json");
+
         AppendData(jsonBody);
 
         SendWebRequest((jsonStr) => 

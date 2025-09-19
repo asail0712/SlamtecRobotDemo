@@ -9,6 +9,9 @@ public class RobotStopAPI : DelWebRequest
     {
         SetUrl(APIDefine.BaseUrl + "/api/core/motion/v1/actions/:current");
 
+        AddHeader("accept", "application/json");
+        AddHeader("Content-Type", "application/json");
+
         SendWebRequest();
     }
 }

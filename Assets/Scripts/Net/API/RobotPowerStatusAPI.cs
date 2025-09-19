@@ -31,6 +31,9 @@ public class RobotPowerStatusAPI : GetWebRequest
     {
         SetUrl(APIDefine.BaseUrl + "/api/core/system/v1/power/status");
 
+        AddHeader("accept", "application/json");
+        AddHeader("Content-Type", "application/json");
+
         SendWebRequest((jsonStr) => 
         {
             finishAction?.Invoke(JsonConvert.DeserializeObject<PowerStatus>((string)jsonStr));
