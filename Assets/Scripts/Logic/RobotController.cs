@@ -86,7 +86,7 @@ public class RobotController : LogicComponent
 
     private void InitialRobot()
     {
-        DirectCallUI<string>(UICommand.AddMessage, $"[Robot Request] 初始化機器人");
+        DirectCallUI<string>(UICommand.AddMessage, $"[Robot Request] 機器人狀態檢查");
 
         new RobotPowerStatusAPI((resp) =>
         {
@@ -113,9 +113,18 @@ public class RobotController : LogicComponent
                 DirectCallUI<string>(UICommand.AddMessage, $"[Robot Warning] 機器人電量不足 {resp.BatteryPercentage}/100");
             }
 
-            SendMsg<RobotReadyMsg>();
+            new RobotNavigationStatusAPI((b) => 
+            {
+                if(!b)
+                {
+                    DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人定位尚未完成");
+                    return;
+                }
 
-            DirectCallUI<bool>(UICommand.RobotReady, true);
+                SendMsg<RobotReadyMsg>();
+
+                DirectCallUI<bool>(UICommand.RobotReady, true);
+            });
         });
     }
 }
