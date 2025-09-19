@@ -15,11 +15,18 @@ public static class UIRequest
     static public string POIToMove          = "POIToMove";
     static public string StopMoving         = "StopMoving";
     static public string BackToHomedock     = "BackToHomedock";
+
+    // Robot initial
+    static public string Reinitial          = "Reinitial";
 }
 
 public static class UICommand
 {
     // Robot Move
+    static public string RobotReady         = "RobotReady";
     static public string NLPToLocation      = "NLPToLocation";
-    static public string SetPOIInfo         = "SetPOIInfo";    
+    static public string SetPOIInfo         = "SetPOIInfo";
+
+    // Message
+    static public string AddMessage         = "AddMessage";
 }

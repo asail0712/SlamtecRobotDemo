@@ -23,7 +23,7 @@ public class POI_UI : UIBase
 
         poiTableMgr.InitTable(itemAnchor, 10, 2, itemPrefab);
         poiTableMgr.SetChildAlignment(TextAnchor.UpperCenter);
-        poiTableMgr.SetGridSpacing(0, 50);
+        poiTableMgr.SetGridSpacing(0, 20);
 
         ListenCall<List<POIInfo>>(UICommand.SetPOIInfo, (infoList) =>
         {

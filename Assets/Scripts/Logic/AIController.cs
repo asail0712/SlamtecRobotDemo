@@ -29,7 +29,7 @@ public class AIController : LogicComponent
     private void HandleAITranscript(string poiName)
     {
         // 顯示POI名稱
-        DirectCallUI<string>(UICommand.NLPToLocation, poiName);
+        DirectCallUI<string>(UICommand.AddMessage, $"[Log] 辨識出地點 {poiName}");
 
         // 比對POI 找出移動的地點
         SendMsg<POIToMoveMsg>(poiName);        

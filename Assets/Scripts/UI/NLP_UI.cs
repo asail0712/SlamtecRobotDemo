@@ -14,8 +14,9 @@ public class NLP_UI : UIBase
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        bIsPushed   = false;
-        micTxt.text = "按下說話";
+        bIsPushed           = false;
+        micTxt.text         = "按下說話";
+        micBtn.interactable = false;
 
         RegisterButton("", micBtn, () => 
         {
@@ -38,6 +39,11 @@ public class NLP_UI : UIBase
             {
                 micTxt.text = "按下說話";
             }
+        });
+
+        ListenCall<bool>(UICommand.RobotReady, (b) =>
+        {
+            micBtn.interactable = b;
         });
 
         ListenCall<string>(UICommand.NLPToLocation, (locName) => 

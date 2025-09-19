@@ -20,13 +20,30 @@ public class POIController : LogicComponent
 {
     private List<POIInfo> infoList = null;
 
+    private static int MAX_ITEM = 8;
+
     public POIController()
     {
+        infoList = new List<POIInfo>();
+
+        for(int i = 0; i < MAX_ITEM; ++i)
+        {
+            POIInfo info = new POIInfo() 
+            {
+                displayName = "無地點",
+                bEnable     = false,
+            };
+
+            infoList.Add(info);
+        }
+
+        DirectCallUI<List<POIInfo>>(UICommand.SetPOIInfo, infoList);
+
         RegisterNotify<RobotReadyMsg>((msg) =>
         {
             new GetPOIsAPI((poiList) => 
             {
-                infoList = ToInfo(poiList);
+                AppendInfo(poiList);
 
                 DirectCallUI<List<POIInfo>>(UICommand.SetPOIInfo, infoList);
             });
@@ -59,30 +76,35 @@ public class POIController : LogicComponent
     {
         if (infoList == null || !infoList.IsValidIndex(idx))
         {
-            // ED TODO
             // 無效的idx要提出顯示
+            DirectCallUI<string>(UICommand.AddMessage, $"[System Error] 無效的POI地點");
 
             return;
         }
 
+        DirectCallUI<string>(UICommand.AddMessage, $"[Log] 將前往 {infoList[idx].displayName}");
+
         SendMsg<RobotMoveMsg>(infoList[idx].displayName);
     }
 
-    private List<POIInfo> ToInfo(Poi[] poiList)
+    private void AppendInfo(Poi[] poiList)
     {
-        List<POIInfo> pOIInfos = new List<POIInfo>();
-
-        foreach(Poi poi in poiList)
-        {
-            POIInfo pOIInfo = new POIInfo() 
-            {
-                uniqueID    = poi.Id,
-                displayName = poi.DisplayName,
-            };
-
-            pOIInfos.Add(pOIInfo);
+        if(infoList == null)
+        { 
+            return; 
         }
 
-        return pOIInfos;
+        for(int i = 0; i < poiList.Length; ++i)
+        {
+            if(i >= MAX_ITEM)
+            {
+                break;
+            }
+
+            POIInfo pOIInfo         = infoList[i];
+            pOIInfo.uniqueID        = poiList[i].Id;
+            pOIInfo.displayName     = poiList[i].DisplayName;
+            pOIInfo.bEnable         = true;
+        }
     }
 }
