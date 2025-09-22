@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 
 using XPlan.Net;
+using XPlan.UI;
 
 public class MoveState
 {
@@ -56,6 +57,8 @@ public class RobotMoveAPI : PostWebRequest
 {
     public RobotMoveAPI(string poiName, Action<MoveResponse> finishAction)
     {
+        UISystem.DirectCall<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"機器人移動"));
+
         string jsonBody = $@"{{
             ""action_name"": ""slamtec.agent.actions.MultiFloorMoveAction"",
             ""options"": {{

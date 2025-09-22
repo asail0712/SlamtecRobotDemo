@@ -13,6 +13,7 @@ public class SlamtecRobotManager : SystemBase
     {
         RegisterLogic(new RobotController());
         RegisterLogic(new POIController());
+        RegisterLogic(new CommandController());
         RegisterLogic(new AIController(aiRealtimeUnity));
         RegisterLogic(new NetController(baseUrl));
     }

@@ -20,43 +20,73 @@ public class RobotMoveMsg : MessageBase
     }
 }
 
+public class RobotChargingMsg : MessageBase
+{
+    public RobotChargingMsg()
+    {
+    }
+}
+
+
+public class RobotStopMsg : MessageBase
+{
+    public RobotStopMsg()
+    {
+    }
+}
+
+
 public class RobotController : LogicComponent
 {    
     public RobotController()
     {       
+        /****************************
+         * 強制初始化
+         * *************************/
         InitialRobot();
 
-        // 要求機器人開始移動
+        /****************************
+         * 要求機器人開始移動
+         * *************************/
         RegisterNotify<RobotMoveMsg>((msg) => 
         {
-            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"機器人移動"));
-
             new RobotMoveAPI(msg.poiName, MoveCallback);
         });
 
-        // 要求機器人回充電樁
-        AddUIListener(UIRequest.BackToHomedock, () =>
+        /****************************
+         * 要求機器人回充電樁
+         * *************************/
+        RegisterNotify<RobotChargingMsg>((msg) =>
         {
-            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"回到充電站"));
-
             new RobotBackToChargAPI(MoveCallback);
         });
 
-        // 要求機器人停止動作
-        AddUIListener(UIRequest.StopMoving, () =>
+        AddUIListener(UIRequest.BackToHomedock, () =>
         {
-            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"機器人停止動作"));
+            new RobotBackToChargAPI(MoveCallback);
+        });
 
+        /****************************
+         * 要求機器人停止動作
+         * *************************/
+        RegisterNotify<RobotStopMsg>((msg) =>
+        {
             new RobotStopAPI();
         });
 
-        // 重新initial
+        AddUIListener(UIRequest.StopMoving, () =>
+        {
+            new RobotStopAPI();
+        });
+
+        /****************************
+         * 手動 initial
+         * *************************/
         AddUIListener(UIRequest.Reinitial, () =>
         {            
             InitialRobot();
         });
     }
-
 
     private void InitialRobot()
     {
@@ -107,8 +137,6 @@ public class RobotController : LogicComponent
                     }
 
                     SendMsg<RobotReadyMsg>();
-
-                    DirectCallUI<bool>(UICommand.RobotReady, true);
                 });
             });
         });

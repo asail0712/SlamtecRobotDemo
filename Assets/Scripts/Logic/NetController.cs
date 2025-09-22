@@ -19,6 +19,6 @@ public class NetController : LogicComponent
 
     private void ErrorCallback(string apiName, string error, string errorContent)
     {
-        DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.NetError, $"{apiName} 發生 {error}, 細節是: {errorContent}"));
+        DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.NetError, $"API=> {apiName} 發生 {error}"));
     }
 }

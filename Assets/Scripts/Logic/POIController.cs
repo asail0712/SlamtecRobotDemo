@@ -24,6 +24,9 @@ public class POIController : LogicComponent
 
     public POIController()
     {
+        /****************************
+         * 初始化左側POI列表
+         * *************************/
         infoList = new List<POIInfo>();
 
         for(int i = 0; i < MAX_ITEM; ++i)
@@ -39,16 +42,28 @@ public class POIController : LogicComponent
 
         DirectCallUI<List<POIInfo>>(UICommand.SetPOIInfo, infoList);
 
+        /***************************************
+         * 等機器人正常運作後，要求POI內容
+         * ************************************/
         RegisterNotify<RobotReadyMsg>((msg) =>
         {
             new GetPOIsAPI((poiList) => 
             {
-                AppendInfo(poiList);
+                ToPOIInfo(poiList);
+
+                foreach(POIInfo info in infoList)
+                {
+                    SendMsg<AddCommandMsg>(CommandType.MoveTo, info.displayName);
+                }
 
                 DirectCallUI<List<POIInfo>>(UICommand.SetPOIInfo, infoList);
+                DirectCallUI<bool>(UICommand.RobotReady, true); // 要完POI資料再開放UI操作
             });
         });
 
+        /***************************************
+         * 透過POI名稱做移動
+         * ************************************/
         RegisterNotify<POIToMoveMsg>((msg) => 
         {
             // 透過POI名稱 找出移動的地點
@@ -60,6 +75,9 @@ public class POIController : LogicComponent
             MoveTo(idx);
         });
 
+        /***************************************
+         * 透過POI ID 做移動(使用者點擊UI)
+         * ************************************/
         AddUIListener<string>(UIRequest.POIToMove, (poiID) => 
         {
             // 透過POI uid 找出移動的地點
@@ -87,7 +105,7 @@ public class POIController : LogicComponent
         SendMsg<RobotMoveMsg>(infoList[idx].displayName);
     }
 
-    private void AppendInfo(Poi[] poiList)
+    private void ToPOIInfo(Poi[] poiList)
     {
         if(infoList == null)
         { 

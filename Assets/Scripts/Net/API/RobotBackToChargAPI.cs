@@ -1,12 +1,14 @@
-﻿using System;
-using Newtonsoft.Json;
-
+﻿using Newtonsoft.Json;
+using System;
 using XPlan.Net;
+using XPlan.UI;
 
 public class RobotBackToChargAPI : PostWebRequest
 {
     public RobotBackToChargAPI(Action<MoveResponse> finishAction)
     {
+        UISystem.DirectCall<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"回到充電站"));
+
         string jsonBody = @"{
             ""action_name"": ""slamtec.agent.actions.MultiFloorBackHomeAction"",
             ""options"": {}
