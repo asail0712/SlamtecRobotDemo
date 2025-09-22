@@ -17,14 +17,14 @@ public class LogUI : UIBase
     {
         itemList = new List<GameObject>();
 
-        ListenCall<string>(UICommand.AddMessage, (log) => 
+        ListenCall<LogInfo>(UICommand.AddMessage, (log) => 
         {
             GameObject logGO = GameObject.Instantiate(logPrefab);
             logAnchor.AddChild(logGO);
             logGO.transform.SetAsFirstSibling();
 
             LogItem logItem = logGO.GetComponent<LogItem>();
-            logItem.SetLog(log);
+            logItem.SetLog(log.ToString());
 
             // log太多 就移除最舊的
             itemList.Add(logGO);

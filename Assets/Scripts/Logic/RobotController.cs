@@ -29,7 +29,7 @@ public class RobotController : LogicComponent
         // 要求機器人開始移動
         RegisterNotify<RobotMoveMsg>((msg) => 
         {
-            DirectCallUI<string>(UICommand.AddMessage, $"[Robot Request] 機器人移動");
+            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"機器人移動"));
 
             new RobotMoveAPI(msg.poiName, MoveCallback);
         });
@@ -37,7 +37,7 @@ public class RobotController : LogicComponent
         // 要求機器人回充電樁
         AddUIListener(UIRequest.BackToHomedock, () =>
         {
-            DirectCallUI<string>(UICommand.AddMessage, $"[Robot Request] 回到充電站");
+            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"回到充電站"));
 
             new RobotBackToChargAPI(MoveCallback);
         });
@@ -45,7 +45,7 @@ public class RobotController : LogicComponent
         // 要求機器人停止動作
         AddUIListener(UIRequest.StopMoving, () =>
         {
-            DirectCallUI<string>(UICommand.AddMessage, $"[Robot Request] 機器人停止動作");
+            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"機器人停止動作"));
 
             new RobotStopAPI();
         });
@@ -60,14 +60,14 @@ public class RobotController : LogicComponent
 
     private void InitialRobot()
     {
-        DirectCallUI<string>(UICommand.AddMessage, $"[Robot Request] 機器人狀態檢查");
+        DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"機器人狀態檢查"));
 
         new RobotCapabilitiesAPI((resp) => 
         {
             if (!resp.Enabled)
             {
                 // 告知錯誤
-                DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人初始化尚未");
+                DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"機器人初始化尚未"));
                 DirectCallUI<bool>(UICommand.RobotReady, false);
                 return;
             }
@@ -77,7 +77,7 @@ public class RobotController : LogicComponent
                 if(resp.PowerStage != "running")
                 {
                     // 告知錯誤
-                    DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人開機尚未完成 {resp.PowerStage}");
+                    DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"機器人開機尚未完成 {resp.PowerStage}"));
                     DirectCallUI<bool>(UICommand.RobotReady, false);
                     return;
                 }
@@ -86,7 +86,7 @@ public class RobotController : LogicComponent
                 {
                     // 告知錯誤 並主動 wake up
                     new RobotWakeUpAPI();
-                    DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人尚未喚醒，正在喚醒中 {resp.SleepMode}");
+                    DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"機器人尚未喚醒，正在喚醒中 {resp.SleepMode}"));
                     DirectCallUI<bool>(UICommand.RobotReady, false);
                     return;
                 }
@@ -94,14 +94,14 @@ public class RobotController : LogicComponent
                 if(resp.BatteryPercentage <= 15)
                 {
                     // 告知錯誤 但是不中斷流程
-                    DirectCallUI<string>(UICommand.AddMessage, $"[Robot Warning] 機器人電量不足 {resp.BatteryPercentage}/100");
+                    DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotWarning, $"機器人電量不足 {resp.BatteryPercentage}/100"));
                 }
 
                 new RobotNavigationStatusAPI((b) => 
                 {
                     if(!b)
                     {
-                        DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 機器人定位尚未完成");
+                        DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"機器人定位尚未完成"));
                         DirectCallUI<bool>(UICommand.RobotReady, false);
                         return;
                     }
@@ -119,25 +119,25 @@ public class RobotController : LogicComponent
         if (moveResponse?.State == null)
         {
             // 沒有狀態，當錯誤處理
-            DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 移動狀態(moveResponse.State.Status)為空");
+            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"移動狀態(moveResponse.State.Status)為空"));
             return;
         }
 
         if (moveResponse.State.Status == 2)
         {
             // 狀態碼為 2 = 失敗
-            DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 移動狀態(moveResponse.State.Status)為2");
+            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"移動狀態(moveResponse.State.Status)為2"));
             return;
         }
 
         if (moveResponse.State.Status == 1 && moveResponse.State.Result != 0)
         {
             // 狀態碼成功，但 result != 0 也可以當作警告/錯誤
-            DirectCallUI<string>(UICommand.AddMessage, $"[Robot Error] 移動結果(moveResponse.State.Result)異常 {moveResponse.State.Result}");
+            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"移動結果(moveResponse.State.Result)異常 {moveResponse.State.Result}"));
             return;
         }
 
         // 其他情況 (執行中 or 成功) 視為沒有錯誤                
-        DirectCallUI<string>(UICommand.AddMessage, $"[Log] 機器人開始動作");
+        DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.Log, $"機器人開始動作"));
     }
 }

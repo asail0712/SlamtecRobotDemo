@@ -77,12 +77,12 @@ public class POIController : LogicComponent
         if (infoList == null || !infoList.IsValidIndex(idx))
         {
             // 無效的idx要提出顯示
-            DirectCallUI<string>(UICommand.AddMessage, $"[System Error] 無效的POI地點");
+            DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.ClientError, $"無效的POI地點"));
 
             return;
         }
 
-        DirectCallUI<string>(UICommand.AddMessage, $"[Log] 將前往 {infoList[idx].displayName}");
+        DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.Log, $"將前往 {infoList[idx].displayName}"));
 
         SendMsg<RobotMoveMsg>(infoList[idx].displayName);
     }

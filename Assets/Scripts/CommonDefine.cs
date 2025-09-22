@@ -1,5 +1,32 @@
 ﻿using UnityEngine;
 
+public enum LogType
+{
+    Log = 0,
+    RobotRequest,
+    RobotWarning,
+    RobotError,
+    NetError,
+    ClientError,
+}
+
+public class LogInfo
+{
+    public LogType type;
+    public string message;
+
+    public LogInfo(LogType type, string message)
+    {
+        this.type       = type;
+        this.message    = message;
+    }
+
+    public string ToString()
+    {
+        return $"[{type.ToString()}] {message}";
+    }
+}
+
 public class CommonDefine
 {
     
