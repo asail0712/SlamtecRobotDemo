@@ -21,7 +21,7 @@ public class LogInfo
         this.message    = message;
     }
 
-    public string ToString()
+    public override string ToString()
     {
         return $"[{type.ToString()}] {message}";
     }

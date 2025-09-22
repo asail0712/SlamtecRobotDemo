@@ -22,8 +22,14 @@ public class POIController : LogicComponent
 
     private static int MAX_ITEM = 8;
 
-    public POIController()
+    public POIController(bool bIgnoreRobot)
     {
+        if (bIgnoreRobot)
+        {
+            DirectCallUI<bool>(UICommand.RobotReady, true); // 要完POI資料再開放UI操作
+            return;
+        }
+
         /****************************
          * 初始化左側POI列表
          * *************************/
