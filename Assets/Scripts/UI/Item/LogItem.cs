@@ -12,6 +12,6 @@ public class LogItem : MonoBehaviour
         // 根據字體的 Preferred Size 來調整
         float height    = showName.preferredHeight;
 
-        (transform as RectTransform).sizeDelta = new Vector2((transform as RectTransform).sizeDelta.x + 20, height + 10);
+        (transform as RectTransform).sizeDelta = new Vector2((transform as RectTransform).sizeDelta.x, height + 10);
     }
 }

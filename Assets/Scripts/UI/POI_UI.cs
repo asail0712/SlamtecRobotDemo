@@ -21,9 +21,10 @@ public class POI_UI : UIBase
     {
         poiTableMgr = new VerticalTableManager<POIInfo>();
 
-        poiTableMgr.InitTable(itemAnchor, 10, 2, itemPrefab);
+        poiTableMgr.InitTable(itemAnchor, 8, 1, itemPrefab);
         poiTableMgr.SetChildAlignment(TextAnchor.UpperCenter);
-        poiTableMgr.SetGridSpacing(0, 20);
+        poiTableMgr.SetGridSpacing(15, 15);
+        poiTableMgr.SetPadding(30, 20, 20, 20);
 
         ListenCall<List<POIInfo>>(UICommand.SetPOIInfo, (infoList) =>
         {

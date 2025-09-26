@@ -121,6 +121,16 @@ namespace XPlan.UI.Component
             }
         }
 
+        public void SetPadding(int top = 0, int bottom = 0, int left = 0, int right = 0)
+        {
+            if (vLayoutGroup != null)
+            {
+                RectOffset rectOffset = new RectOffset(left, right, top, bottom);
+
+                vLayoutGroup.padding = rectOffset;
+            }
+        }
+
         public void SetChildAlignment(TextAnchor anchor)
         {
             if (vLayoutGroup != null)

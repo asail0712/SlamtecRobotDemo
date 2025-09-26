@@ -630,6 +630,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConfirmUI
       objectReference: {fileID: 0}
+    - target: {fileID: 4698086200950102967, guid: c04a17197bb9de14184ae8b07fb6b632, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8707478886708861901, guid: c04a17197bb9de14184ae8b07fb6b632, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -723,6 +727,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 719891685}
     m_Modifications:
+    - target: {fileID: 1170193144751119578, guid: 3daab3fc9673c0145b0c8ddb3417fd2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa2fae4a90eb55c4bb0ed984f10b6a22, type: 3}
     - target: {fileID: 1876969986408179360, guid: 3daab3fc9673c0145b0c8ddb3417fd2d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -739,6 +747,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2082589159588686356, guid: 3daab3fc9673c0145b0c8ddb3417fd2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa2fae4a90eb55c4bb0ed984f10b6a22, type: 3}
     - target: {fileID: 2553557509787630563, guid: 3daab3fc9673c0145b0c8ddb3417fd2d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -819,6 +831,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2731078686732820873, guid: 3daab3fc9673c0145b0c8ddb3417fd2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa2fae4a90eb55c4bb0ed984f10b6a22, type: 3}
     - target: {fileID: 4017464788628491742, guid: 3daab3fc9673c0145b0c8ddb3417fd2d, type: 3}
       propertyPath: m_Name
       value: TalkToLocUI
