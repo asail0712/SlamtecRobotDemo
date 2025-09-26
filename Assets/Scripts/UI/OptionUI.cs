@@ -8,13 +8,15 @@ public class OptionUI : UIBase
     [SerializeField] private Button initialBtn;
     [SerializeField] private Button stopBtn;
     [SerializeField] private Button backToBtn;
+    [SerializeField] private Button refreshPOIBtn;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        initialBtn.interactable = false;
-        stopBtn.interactable    = false;
-        backToBtn.interactable  = false;
+        initialBtn.interactable     = false;
+        stopBtn.interactable        = false;
+        backToBtn.interactable      = false;
+        refreshPOIBtn.interactable  = false;
 
         RegisterButton(UIRequest.RobotInitial, initialBtn, () => 
         {
@@ -22,6 +24,7 @@ public class OptionUI : UIBase
         });
         RegisterButton(UIRequest.StopMoving, stopBtn);
         RegisterButton(UIRequest.BackToHomedock, backToBtn);
+        RegisterButton(UIRequest.RefreshPOI, refreshPOIBtn);
 
         ListenCall<bool>(UICommand.RobotReady, (b) => 
         {

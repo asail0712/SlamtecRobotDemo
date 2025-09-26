@@ -48,6 +48,9 @@ public static class UIRequest
 
     // IP Check
     static public string ConfirmIP          = "ConfirmIP";
+
+    // POI
+    static public string RefreshPOI         = "RefreshPOI";    
 }
 
 public static class UICommand

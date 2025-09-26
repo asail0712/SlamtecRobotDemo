@@ -49,27 +49,23 @@ public class POIController : LogicComponent
         DirectCallUI<List<POIInfo>>(UICommand.SetPOIInfo, infoList);
 
         /***************************************
-         * 等機器人正常運作後，要求POI內容
+         * 要求POI內容
          * ************************************/
+        // 等機器人正常運作後
         RegisterNotify<RobotReadyMsg>((msg) =>
         {
-            new GetPOIsAPI((poiList) => 
-            {
-                ToPOIInfo(poiList);
+            RefreshPOI();
+        });
 
-                foreach(POIInfo info in infoList)
-                {
-                    SendMsg<AddCommandMsg>(CommandType.MoveTo, info.displayName);
-                }
-
-                DirectCallUI<List<POIInfo>>(UICommand.SetPOIInfo, infoList);
-                DirectCallUI<bool>(UICommand.RobotReady, true); // 要完POI資料再開放UI操作
-            });
+        // 使用者要求刷新
+        AddUIListener(UIRequest.RefreshPOI, () =>
+        {
+            RefreshPOI();
         });
 
         /***************************************
-         * 透過POI名稱做移動
-         * ************************************/
+            * 透過POI名稱做移動
+            * ************************************/
         RegisterNotify<POIToMoveMsg>((msg) => 
         {
             // 透過POI名稱 找出移動的地點
@@ -93,6 +89,24 @@ public class POIController : LogicComponent
             });
 
             MoveTo(idx);
+        });
+    }
+
+    private void RefreshPOI()
+    {
+        new GetPOIsAPI((poiList) =>
+        {
+            ToPOIInfo(poiList);
+
+            SendMsg<ClearAllCommandMsg>();
+
+            foreach (POIInfo info in infoList)
+            {
+                SendMsg<AddCommandMsg>(CommandType.MoveTo, info.displayName);
+            }
+
+            DirectCallUI<List<POIInfo>>(UICommand.SetPOIInfo, infoList);
+            DirectCallUI<bool>(UICommand.RobotReady, true); // 要完POI資料再開放UI操作
         });
     }
 

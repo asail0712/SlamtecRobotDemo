@@ -14,6 +14,14 @@ public enum CommandType
     Stop,
 }
 
+public class ClearAllCommandMsg : MessageBase
+{
+    public ClearAllCommandMsg()
+    {
+
+    }
+}
+
 public class AddCommandMsg : MessageBase
 {
     public CommandType type;
@@ -75,6 +83,8 @@ public class CommandController : LogicComponent
         commandList.Add(new CommandInfo($"不要動", STOP));
         commandList.Add(new CommandInfo($"別動", STOP));
 
+        const int BasicCommandCount = 10;
+
         if (bIgnoreRobot)
         {
             InitialPrompt(aiRealTime);
@@ -83,6 +93,17 @@ public class CommandController : LogicComponent
         /**************************************
          * 等收到POI訊息後生成AI用的Prompt
          * ************************************/
+        RegisterNotify<ClearAllCommandMsg>((dummy) =>
+        {
+            if(commandList.Count > BasicCommandCount)
+            {
+                // 前10個為基本指令
+                commandList.RemoveRange(BasicCommandCount, commandList.Count - (BasicCommandCount + 1));
+            }
+
+            InitialPrompt(aiRealTime);
+        });
+
         RegisterNotify<AddCommandMsg>((msg) =>
         {
             AddMoveToCommand(msg.param);
