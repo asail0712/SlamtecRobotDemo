@@ -1027,7 +1027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiRealtimeUnity: {fileID: 1130973576}
   baseUrl: 192.168.11.1
-  bIgnoreRobot: 0
+  bIgnoreRobotInitial: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

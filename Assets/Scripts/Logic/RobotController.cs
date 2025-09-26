@@ -38,7 +38,7 @@ public class RobotStopMsg : MessageBase
 
 public class RobotController : LogicComponent
 {    
-    public RobotController()
+    public RobotController(bool bIgnoreRobotInitial)
     {       
         /****************************
          * 強制初始化
@@ -84,11 +84,21 @@ public class RobotController : LogicComponent
          * *************************/
         AddUIListener(UIRequest.RobotInitial, () =>
         {            
+            if(bIgnoreRobotInitial)
+            {
+                return;
+            }
+
             InitialRobot();
         });
 
         RegisterNotify<RobotInitialMsg>((dummy) =>
         {
+            if (bIgnoreRobotInitial)
+            {
+                return;
+            }
+
             InitialRobot();
         });
     }
