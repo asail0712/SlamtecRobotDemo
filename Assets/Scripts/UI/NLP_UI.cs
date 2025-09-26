@@ -6,8 +6,12 @@ using XPlan.UI;
 public class NLP_UI : UIBase
 {
     [SerializeField] private Button micBtn;
+    [SerializeField] private Image btnImg;
     [SerializeField] private Text micTxt;
     [SerializeField] private Text talkTxt;
+
+    [SerializeField] private Sprite recOffSprite;
+    [SerializeField] private Sprite recOnSprite;
 
     private bool bIsPushed = false;
 
@@ -33,11 +37,13 @@ public class NLP_UI : UIBase
 
             if (bIsPushed)
             {
-                micTxt.text = "收音中…(點擊關)";
+                btnImg.sprite   = recOnSprite;
+                micTxt.text     = "收音中…(點擊關)";                
             }
             else
             {
-                micTxt.text = "按下說話";
+                btnImg.sprite   = recOffSprite;
+                micTxt.text     = "按下說話";
             }
         });
 
