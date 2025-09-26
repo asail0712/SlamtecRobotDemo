@@ -950,7 +950,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5728745971265054887, guid: acc8c5cb2735ef145a9f3ac75e13ec81, type: 3}
       propertyPath: loadingList.Array.size
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5728745971265054887, guid: acc8c5cb2735ef145a9f3ac75e13ec81, type: 3}
+      propertyPath: loadingList.Array.data[1].sortIdx
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5728745971265054887, guid: acc8c5cb2735ef145a9f3ac75e13ec81, type: 3}
       propertyPath: loadingList.Array.data[0].bVisible
@@ -960,6 +964,18 @@ PrefabInstance:
       propertyPath: loadingList.Array.data[0].uiPerfab
       value: 
       objectReference: {fileID: 4017464788628491742, guid: 3daab3fc9673c0145b0c8ddb3417fd2d, type: 3}
+    - target: {fileID: 5728745971265054887, guid: acc8c5cb2735ef145a9f3ac75e13ec81, type: 3}
+      propertyPath: loadingList.Array.data[1].bVisible
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5728745971265054887, guid: acc8c5cb2735ef145a9f3ac75e13ec81, type: 3}
+      propertyPath: loadingList.Array.data[1].uiPerfab
+      value: 
+      objectReference: {fileID: 4698086200950102967, guid: c04a17197bb9de14184ae8b07fb6b632, type: 3}
+    - target: {fileID: 5728745971265054887, guid: acc8c5cb2735ef145a9f3ac75e13ec81, type: 3}
+      propertyPath: loadingList.Array.data[1].bIsPersistentUI
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -46,11 +46,11 @@ namespace XPlan.Net
             errorActions.Clear();
         }
 
-        static internal void TriggerError(string apiName, string errorType, string errorMsg)
+        static internal void TriggerError(string apiUrl, string errorType, string errorMsg)
         {
             foreach(Action<string, string, string> errorAction in errorActions)
             {
-                errorAction?.Invoke(apiName, errorType, errorMsg);
+                errorAction?.Invoke(apiUrl, errorType, errorMsg);
             }
         }
     }

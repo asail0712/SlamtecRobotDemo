@@ -2,6 +2,16 @@
 
 using XPlan;
 using XPlan.Net;
+using XPlan.Observe;
+
+public class RobotInitialMsg : MessageBase 
+{
+    public RobotInitialMsg()
+    {
+
+    }
+}
+
 
 public class NetController : LogicComponent
 {
@@ -10,6 +20,13 @@ public class NetController : LogicComponent
         APIDefine.BaseUrl = $"{baseUrl}:1448";
 
         WebRequestHelper.AddErrorDelegate(ErrorCallback);
+
+        AddUIListener<string>(UIRequest.ConfirmIP, (ipStr) => 
+        {
+            APIDefine.BaseUrl = $"{baseUrl}:1448";
+
+            SendGlobalMsg<RobotInitialMsg>();
+        });
     }
 
     protected override void OnDispose(bool bAppQuit)
@@ -17,8 +34,13 @@ public class NetController : LogicComponent
         WebRequestHelper.RemoveErrorDelegate(ErrorCallback);
     }
 
-    private void ErrorCallback(string apiName, string error, string errorContent)
+    private void ErrorCallback(string apiUrl, string error, string errorContent)
     {
-        DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.NetError, $"API=> {apiName} 發生 {error}"));
+        if(apiUrl.Contains("/api/core/system/v1/capabilities"))
+        {
+            DirectCallUI<bool>(UICommand.RobotReady, false);
+        }
+
+        DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.NetError, $"API=> {apiUrl} 發生 {error}"));
     }
 }

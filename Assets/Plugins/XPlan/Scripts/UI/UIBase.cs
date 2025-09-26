@@ -106,11 +106,6 @@ namespace XPlan.UI
 		{
 			inputTxt.onValueChanged.AddListener((str) =>
 			{
-				if(bClearWhenPress)
-				{
-					inputTxt.text = "";
-                }
-
 				DirectTrigger<string>(uniqueID, str, onPress);
 			});
 		}
@@ -119,11 +114,6 @@ namespace XPlan.UI
 		{
 			inputTxt.onValueChanged.AddListener((str) =>
 			{
-                if (bClearWhenPress)
-                {
-                    inputTxt.text = "";
-                }
-
                 DirectTrigger<string>(uniqueID, str, onPress);
 			});
 		}

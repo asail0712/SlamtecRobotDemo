@@ -44,7 +44,10 @@ public static class UIRequest
     static public string BackToHomedock     = "BackToHomedock";
 
     // Robot initial
-    static public string Reinitial          = "Reinitial";
+    static public string RobotInitial       = "RobotInitial";
+
+    // IP Check
+    static public string ConfirmIP          = "ConfirmIP";
 }
 
 public static class UICommand

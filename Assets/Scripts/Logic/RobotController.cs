@@ -43,7 +43,7 @@ public class RobotController : LogicComponent
         /****************************
          * 強制初始化
          * *************************/
-        InitialRobot();
+        //InitialRobot();
 
         /****************************
          * 要求機器人開始移動
@@ -80,10 +80,15 @@ public class RobotController : LogicComponent
         });
 
         /****************************
-         * 手動 initial
+         * Robot initial
          * *************************/
-        AddUIListener(UIRequest.Reinitial, () =>
+        AddUIListener(UIRequest.RobotInitial, () =>
         {            
+            InitialRobot();
+        });
+
+        RegisterNotify<RobotInitialMsg>((dummy) =>
+        {
             InitialRobot();
         });
     }
@@ -97,7 +102,7 @@ public class RobotController : LogicComponent
             if (!resp.Enabled)
             {
                 // 告知錯誤
-                DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"機器人初始化尚未"));
+                DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"機器人尚未初始化"));
                 DirectCallUI<bool>(UICommand.RobotReady, false);
                 return;
             }

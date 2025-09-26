@@ -16,7 +16,10 @@ public class OptionUI : UIBase
         stopBtn.interactable    = false;
         backToBtn.interactable  = false;
 
-        RegisterButton(UIRequest.Reinitial, initialBtn);
+        RegisterButton(UIRequest.RobotInitial, initialBtn, () => 
+        {
+            initialBtn.interactable = false;
+        });
         RegisterButton(UIRequest.StopMoving, stopBtn);
         RegisterButton(UIRequest.BackToHomedock, backToBtn);
 
