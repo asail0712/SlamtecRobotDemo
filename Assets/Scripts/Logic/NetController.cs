@@ -17,16 +17,18 @@ public class NetController : LogicComponent
 {
     public NetController(string baseUrl)
     {
-        APIDefine.BaseUrl = $"{baseUrl}:1448";
+        APIDefine.BaseUrl = $"http://{baseUrl}:1448";
 
         WebRequestHelper.AddErrorDelegate(ErrorCallback);
 
         AddUIListener<string>(UIRequest.ConfirmIP, (ipStr) => 
         {
-            APIDefine.BaseUrl = $"{baseUrl}:1448";
+            APIDefine.BaseUrl = $"http://{baseUrl}:1448";
 
             SendGlobalMsg<RobotInitialMsg>();
         });
+
+        DirectCallUI<string>(UICommand.InitIP, baseUrl);
     }
 
     protected override void OnDispose(bool bAppQuit)

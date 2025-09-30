@@ -122,7 +122,7 @@ public class POIController : LogicComponent
 
         DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.Log, $"將前往 {infoList[idx].displayName}"));
 
-        SendMsg<RobotMoveMsg>(infoList[idx].displayName);
+        SendMsg<RobotMoveMsg>(infoList[idx].pose);
     }
 
     private void ToPOIInfo(Poi[] poiList)
@@ -141,7 +141,8 @@ public class POIController : LogicComponent
 
             POIInfo pOIInfo         = infoList[i];
             pOIInfo.uniqueID        = poiList[i].Id;
-            pOIInfo.displayName     = poiList[i].DisplayName;
+            pOIInfo.displayName     = poiList[i].metadata.displayName;
+            pOIInfo.pose            = poiList[i].Pose;
             pOIInfo.bEnable         = true;
         }
     }

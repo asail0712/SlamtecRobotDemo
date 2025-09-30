@@ -7,6 +7,7 @@ public class POIInfo : TableItemInfo
 {
     public string displayName   = "";
     public bool bEnable         = true;
+    public Pose pose;
 }
 
 public class POI_UI : UIBase

@@ -28,9 +28,10 @@ public class OptionUI : UIBase
 
         ListenCall<bool>(UICommand.RobotReady, (b) => 
         {
-            initialBtn.interactable = !b;
-            stopBtn.interactable    = b;
-            backToBtn.interactable  = b;
+            initialBtn.interactable     = !b;
+            stopBtn.interactable        = b;
+            backToBtn.interactable      = b;
+            refreshPOIBtn.interactable  = b;
         });
     }
 }

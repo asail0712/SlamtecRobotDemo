@@ -7,13 +7,19 @@ using XPlan.Net;
 public class Pose
 {
     [JsonProperty("x")]
-    public double X { get; set; }
+    public float X { get; set; }
 
     [JsonProperty("y")]
-    public double Y { get; set; }
+    public float Y { get; set; }
 
     [JsonProperty("yaw")]
-    public double Yaw { get; set; }
+    public float Yaw { get; set; }
+}
+
+public class Metadata
+{
+    [JsonProperty("display_name")]
+    public string displayName;
 }
 
 public class Poi
@@ -21,17 +27,8 @@ public class Poi
     [JsonProperty("id")]
     public string Id { get; set; }
 
-    [JsonProperty("poi_name")]
-    public string DisplayName { get; set; }
-
-    [JsonProperty("type")]
-    public string poiType { get; set; }
-
-    [JsonProperty("floor")]
-    public string FloorId { get; set; }
-
-    [JsonProperty("building")]
-    public string poiBuilding { get; set; }
+    [JsonProperty("metadata")]
+    public Metadata metadata { get; set; }
 
     [JsonProperty("pose")]
     public Pose Pose { get; set; }
@@ -41,7 +38,7 @@ public class GetPOIsAPI : GetWebRequest
 {
     public GetPOIsAPI(Action<Poi[]> finishAction)
     {
-        SetUrl(APIDefine.BaseUrl + "/api/multi-floor/map/v1/pois");
+        SetUrl(APIDefine.BaseUrl + "/api/core/artifact/v1/pois");
 
         AddHeader("accept", "application/json");
         AddHeader("Content-Type", "application/json");

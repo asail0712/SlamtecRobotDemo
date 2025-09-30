@@ -17,7 +17,7 @@ public class CapabilitiesRepsonse
 
 public class RobotCapabilitiesAPI : GetWebRequest
 {
-    public RobotCapabilitiesAPI(Action<CapabilitiesRepsonse> finishAction)
+    public RobotCapabilitiesAPI(Action<CapabilitiesRepsonse[]> finishAction)
     {
         SetUrl(APIDefine.BaseUrl + "/api/core/system/v1/capabilities");
 
@@ -26,7 +26,7 @@ public class RobotCapabilitiesAPI : GetWebRequest
 
         SendWebRequest((jsonStr) =>
         {
-            finishAction?.Invoke(JsonConvert.DeserializeObject<CapabilitiesRepsonse>((string)jsonStr));
+            finishAction?.Invoke(JsonConvert.DeserializeObject<CapabilitiesRepsonse[]>((string)jsonStr));
         });
     }
 }

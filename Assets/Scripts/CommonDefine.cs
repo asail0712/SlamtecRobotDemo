@@ -62,4 +62,7 @@ public static class UICommand
 
     // Message
     static public string AddMessage         = "AddMessage";
+
+    // IP Check
+    static public string InitIP             = "InitIP";
 }

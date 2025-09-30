@@ -25,6 +25,12 @@ public class IPConfirmUI : UIBase
         {
             okBtn.interactable = IsIPv4(ipStr);
         });
+
+        ListenCall<string>(UICommand.InitIP, (ipStr) => 
+        {
+            inputTxt.text       = ipStr;
+            okBtn.interactable  = IsIPv4(inputTxt.text);
+        });
     }
 
     static readonly Regex IPv4Strict = new Regex(

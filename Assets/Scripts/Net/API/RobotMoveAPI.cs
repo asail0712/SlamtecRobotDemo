@@ -1,8 +1,9 @@
-﻿using System;
-using Newtonsoft.Json;
-
+﻿using Newtonsoft.Json;
+using System;
+using UnityEngine;
 using XPlan.Net;
 using XPlan.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class MoveState
 {
@@ -52,28 +53,97 @@ public class MoveResponse
     public MoveState State { get; set; }
 }
 
+public class Target
+{
+    [JsonProperty("x")]
+    public float X { get; set; }
+    [JsonProperty("y")]
+    public float Y { get; set; }
+    [JsonProperty("z")]
+    public float Z { get; set; }
+}
+
+public class Options
+{
+    [JsonProperty("target")]
+    public Target target { get; set; }
+}
+
+
+public class MoveRequest
+{    
+    [JsonProperty("action_name")]
+    public string actionName { get; set; }
+
+    [JsonProperty("options")]
+    public Options options { get; set; }
+
+    [JsonProperty("move_options")]
+    public MoveOptions moveOptions { get; set; }
+}
+
+public class MoveOptions
+{
+    public int mode { get; set; }
+    public string[] flags { get; set; }
+    public float yaw { get; set; }
+    public float acceptable_precision { get; set; }
+    public int fail_retry_count{ get; set; }
+    public float speed_ratio { get; set; }
+
+    public MoveOptions(float yaw)
+    {
+        this.mode                   = 0;
+        this.flags                  = new string[1];
+        this.yaw                    = yaw;
+        this.acceptable_precision   = 0f;
+        this.fail_retry_count       = 0;
+        this.speed_ratio            = 0f;
+    }
+}
 
 public class RobotMoveAPI : PostWebRequest
 {
-    public RobotMoveAPI(string poiName, Action<MoveResponse> finishAction)
+    public RobotMoveAPI(Pose pose, Action<MoveResponse> finishAction)
     {
         UISystem.DirectCall<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"機器人移動"));
 
-        string jsonBody = $@"{{
-            ""action_name"": ""slamtec.agent.actions.MultiFloorMoveAction"",
-            ""options"": {{
-                ""target"": {{
-                    ""poi_name"": ""{poiName}""
-                }},
-                ""move_options"": {{
-                    ""mode"": 0,
-                    ""flags"": [ ""with_yaw"", ""precise"" ],
-                    ""yaw"": 1,
-                    ""acceptable_precision"": 0,
-                    ""fail_retry_count"": 0
-                }}
-            }}
-        }}";
+        MoveRequest request = new MoveRequest()
+        {
+            actionName  = "slamtec.agent.actions.MoveToAction",
+            options     = new Options()
+            {
+                target = new Target()
+                { 
+                    X = pose.X,
+                    Y = pose.Y,
+                }
+            },
+
+            moveOptions = new MoveOptions(pose.Yaw),
+        };
+
+
+        //string jsonBody = $@"{{
+        //    ""action_name"": ""slamtec.agent.actions.MoveToAction"",
+        //    ""options"": {{
+        //        ""target"": {{
+        //            ""x"": ""{pose.X}"",
+        //            ""y"": ""{pose.Y}"",
+        //            ""z"": ""0"",
+        //        }},
+        //        ""move_options"": {{
+        //            ""mode"": 0,
+        //            ""flags"": [],
+        //            ""yaw"": ""{pose.Yaw}"",
+        //            ""acceptable_precision"": 0,
+        //            ""fail_retry_count"": 0,
+        //            ""speed_ratio"": 0
+        //        }}
+        //    }}
+        //}}";
+
+        string jsonBody = JsonConvert.SerializeObject(request);
 
         SetUrl(APIDefine.BaseUrl + "/api/core/motion/v1/actions");
 

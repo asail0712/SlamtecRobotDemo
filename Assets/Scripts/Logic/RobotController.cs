@@ -13,10 +13,10 @@ public class RobotReadyMsg : MessageBase
 
 public class RobotMoveMsg : MessageBase
 {
-    public string poiName;
-    public RobotMoveMsg(string poiName)
+    public Pose pose;
+    public RobotMoveMsg(Pose pose)
     {
-        this.poiName = poiName;
+        this.pose = pose;
     }
 }
 
@@ -50,7 +50,7 @@ public class RobotController : LogicComponent
          * *************************/
         RegisterNotify<RobotMoveMsg>((msg) => 
         {
-            new RobotMoveAPI(msg.poiName, MoveCallback);
+            new RobotMoveAPI(msg.pose, MoveCallback);
         });
 
         /****************************
@@ -107,14 +107,17 @@ public class RobotController : LogicComponent
     {
         DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"機器人狀態檢查"));
 
-        new RobotCapabilitiesAPI((resp) => 
+        new RobotCapabilitiesAPI((respList) => 
         {
-            if (!resp.Enabled)
+            foreach(CapabilitiesRepsonse resp in respList)
             {
-                // 告知錯誤
-                DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"機器人尚未初始化"));
-                DirectCallUI<bool>(UICommand.RobotReady, false);
-                return;
+                if (!resp.Enabled)
+                {
+                    // 告知錯誤
+                    DirectCallUI<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotError, $"{resp.Name} 尚未完成初始化"));
+                    DirectCallUI<bool>(UICommand.RobotReady, false);
+                    return;
+                }
             }
 
             new RobotPowerStatusAPI((resp) =>

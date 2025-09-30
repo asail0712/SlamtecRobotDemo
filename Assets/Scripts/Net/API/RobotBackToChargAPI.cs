@@ -10,7 +10,7 @@ public class RobotBackToChargAPI : PostWebRequest
         UISystem.DirectCall<LogInfo>(UICommand.AddMessage, new LogInfo(LogType.RobotRequest, $"回到充電站"));
 
         string jsonBody = @"{
-            ""action_name"": ""slamtec.agent.actions.MultiFloorBackHomeAction"",
+            ""action_name"": ""slamtec.agent.actions.GoHomeAction"",
             ""options"": {}
         }";
 
